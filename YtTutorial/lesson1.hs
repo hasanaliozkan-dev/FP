@@ -1,5 +1,6 @@
 -- [1] ++ [2,3,4,5] == 1: [2,3,4,5] 
 -- GHC stands for Glasgow Haskell Compiler
+
 qSort [] = []
 qSort(x:xs) = qSort ys ++ [x] ++ qSort(zs)
               where

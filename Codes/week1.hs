@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs #-}
-
+--Generalised Algebric Datatypes
 import Prelude
 
 {- List a type -}
