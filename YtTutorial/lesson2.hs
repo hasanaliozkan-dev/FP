@@ -111,8 +111,10 @@ myPerfects :: Int -> [Int]
 myPerfects n = [n | n <- [1..n] ,isPerfect n] 
 
 myScalar :: [Int] -> [Int] -> Int
-myScalar xs ys = sum [xs!!i * ys!!i | i <- [0..n-1]]
+myScalar xs ys = mySum [xs!!i * ys!!i | i <- [0..n-1]]
                 where n = length xs 
 
+myScalarWZip :: [Int] -> [Int] -> Int
+myScalarWZip xs ys = mySum [x*y | (x,y)<- myZip xs ys] 
 
 
