@@ -88,3 +88,31 @@ positionsOfItem n xs =
 
 countOfItem :: Eq a => a -> [a] -> Int
 countOfItem x xs = length [x' | x' <- xs , x == x']
+
+
+
+isPyths :: Int -> Int -> Int -> Bool
+isPyths n l p = n^2 + l^2 == p^2
+
+myPyths :: Int -> [(Int,Int,Int)]
+myPyths p = [(n,l,p)| (n,l) <- myCartesian2 [1..p] [1..p]  , isPyths n l p]
+
+
+mySum :: [Int] -> Int
+mySum l =
+    case l of
+        []   -> 0
+        x:xs -> x + mySum xs
+
+isPerfect :: Int -> Bool
+isPerfect n = mySum(myFactor n) -n == n
+
+myPerfects :: Int -> [Int]
+myPerfects n = [n | n <- [1..n] ,isPerfect n] 
+
+myScalar :: [Int] -> [Int] -> Int
+myScalar xs ys = sum [xs!!i * ys!!i | i <- [0..n-1]]
+                where n = length xs 
+
+
+
