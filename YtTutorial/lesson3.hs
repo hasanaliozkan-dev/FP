@@ -79,3 +79,50 @@ myMergeSort [x] = [x]
 myMergeSort xs = myMerge (myMergeSort ys) (myMergeSort zs)
                 where (ys,zs) = halve xs
 
+
+myMapL :: (a->b) -> [a] -> [b]
+myMapL f xs = [f x | x<- xs]
+
+{-myMapR :: (a->b) -> [a] -> [b]
+myMapR f [] = []
+myMapR f xs = f x : myMapR f xs
+-}
+myFilterL :: (a->Bool) -> [a] -> [a]
+myFilterL p xs = [x | x <- xs , p x]
+
+{-myFilterR ::  (a->Bool) -> [a] -> [a]
+myFilterR p [] = []
+myFilterR p (x:xs) =
+    | p xs         = x : myFilterR p xs
+    | otherwise    = myFilterR p xs
+-}
+myFoldr :: (a->b->b) -> b->[a]->b
+myFoldr f v [] = v
+myFoldr f v (x:xs) = f x (myFoldr f v xs)
+ 
+(.) :: (b -> c) -> (a->b) -> (a->c)
+f . g = \x -> f (g x)  
+{-}
+myOdd :: Int -> Bool
+myOdd n = not (.) even n
+-}
+myAll :: (a-> Bool) -> [a] -> Bool
+myAll p xs = and  [p x | x <- xs]
+
+myAny :: (a-> Bool) -> [a] -> Bool
+myAny p xs = or [p x | x <- xs]
+
+myTakeWhile :: (a-> Bool) -> [a] -> [a]
+myTakeWhile p [] = []
+myTakeWhile p (x:xs) =
+    | p x            = x : myTakeWhile p xs
+    | otherwise      = []  
+
+
+myDropWhile :: (a-> Bool) -> [a] -> [a]
+myDropWhile p [] = []
+myDropWhile p (x:xs) =
+    | p x            = x : myDropWhile p xs
+    | otherwise      = x:xs
+
+-- [f x | x<-xs , p x] == map f (filter p xs) 
