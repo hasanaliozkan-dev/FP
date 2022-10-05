@@ -30,6 +30,12 @@ myZip [] _ = []
 myZip _ [] = []
 myZip (x:xs) (y:ys) = (x,y) : myZip xs ys
 
+myZipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+myZipWith f (x:xs) (y:ys) = (f x y) : myZipWith f xs ys
+myZipWith _ _ _ = []
+
+
+
 
 myAnd :: [Bool] -> Bool
 myAnd [] = True 
@@ -112,17 +118,61 @@ myAll p xs = and  [p x | x <- xs]
 myAny :: (a-> Bool) -> [a] -> Bool
 myAny p xs = or [p x | x <- xs]
 
+{-
 myTakeWhile :: (a-> Bool) -> [a] -> [a]
 myTakeWhile p [] = []
 myTakeWhile p (x:xs) =
     | p x            = x : myTakeWhile p xs
     | otherwise      = []  
+-}
 
-
+{-
 myDropWhile :: (a-> Bool) -> [a] -> [a]
 myDropWhile p [] = []
 myDropWhile p (x:xs) =
     | p x            = x : myDropWhile p xs
     | otherwise      = x:xs
-
+-}
 -- [f x | x<-xs , p x] == map f (filter p xs) 
+
+beforeNewLine :: String -> String
+beforeNewLine ""        = ""
+beforeNewLine ('\n':xs) = ""
+beforeNewLine (x:xs)    = x : beforeNewLine xs
+
+afterNewLine :: String -> String
+afterNewLine ""        = ""
+afterNewLine ('\n':xs) = xs
+afterNewLine (x:xs)    = afterNewLine xs
+
+
+myLines :: String -> [String]
+myLines "" = []
+myLines xs = (beforeNewLine xs) : myLines (afterNewLine xs)
+
+
+myUnlines :: [String] -> String
+myUnlines [] = ""
+myUnlines (x:xs) = x ++ "\n" ++ myUnlines xs 
+
+beforeWhiteSpace :: String -> String
+beforeWhiteSpace ""        = ""
+beforeWhiteSpace (' ':xs) = ""
+beforeWhiteSpace (x:xs)    = x : beforeWhiteSpace xs
+
+afterWhiteSpace :: String -> String
+afterWhiteSpace ""        = ""
+afterWhiteSpace (' ':xs) = xs
+afterWhiteSpace (x:xs)    = afterWhiteSpace xs
+
+myWords:: String -> [String]
+myWords "" = []
+myWords xs = (beforeWhiteSpace xs) : myWords (afterWhiteSpace xs)
+
+myUnWords :: [String] -> String
+myUnWords [] = ""
+myUnWords (x:xs) = x ++ " " ++ myUnWords xs
+
+lengthxs=sum[1|_<-xs]
+firstsps=[x|(x,_)<-ps]
+concatxss=[x|xs<-xss,x<-xs]
