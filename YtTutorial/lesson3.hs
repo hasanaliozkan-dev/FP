@@ -172,7 +172,8 @@ myWords xs = (beforeWhiteSpace xs) : myWords (afterWhiteSpace xs)
 myUnWords :: [String] -> String
 myUnWords [] = ""
 myUnWords (x:xs) = x ++ " " ++ myUnWords xs
-
-lengthxs=sum[1|_<-xs]
-firstsps=[x|(x,_)<-ps]
-concatxss=[x|xs<-xss,x<-xs]
+{-
+myLength xs=sum[1|_<-xs]
+myFirsts ps=[x|(x,_)<-ps]
+myConcat xss=[x|xs<-xss,x<-xs]
+-}
