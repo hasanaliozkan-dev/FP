@@ -105,6 +105,9 @@ myFilterR p (x:xs) =
 myFoldr :: (a->b->b) -> b->[a]->b
 myFoldr f v [] = v
 myFoldr f v (x:xs) = f x (myFoldr f v xs)
+
+
+ 
  
 (.) :: (b -> c) -> (a->b) -> (a->c)
 f . g = \x -> f (g x)  
@@ -114,6 +117,7 @@ myOdd n = not (.) even n
 -}
 myAll :: (a-> Bool) -> [a] -> Bool
 myAll p xs = and  [p x | x <- xs]
+ 
 
 myAny :: (a-> Bool) -> [a] -> Bool
 myAny p xs = or [p x | x <- xs]
