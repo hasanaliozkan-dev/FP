@@ -1,5 +1,4 @@
-import Data.Time.Format.ISO8601 (yearFormat)
-import System.Posix.Internals (lstat)
+
 data Op = Add | Sub | Mul | Div
 
 apply :: Op -> Int -> Int -> Int
@@ -14,7 +13,38 @@ valid Sub x y = x > y
 valid Mul _ _ = True
 valid Div x y = x `mod` y == 0
 
-data Expr = Val Int | App Op Expr Expr
+instance Show Op where
+  show Add = "+"
+  show Sub = "-"
+  show Mul = "*"
+  show Div = "/"
+
+data Expr = Val Int | App Op Expr Expr  
+{-
+printExpr :: Expr -> String
+printExpr e =
+  case e of
+    Val i -> show i
+    App o e1 e2 -> printExpr e1 ++ "+" ++ printExpr e2
+
+
+printLExpr :: [Expr] -> String
+printLExpr l =
+  case l of
+    []  -> ""
+    x:xs -> printExpr x ++ " " ++ printLExpr xs
+
+instance Show Expr where
+  show :: Expr -> String
+  show e = printExpr e
+-}
+
+instance Show Expr where
+  show (Val n)      = show n
+  show (App o l r)  = brak l ++ show o ++ brak r
+    where
+      brak (Val n) = show n
+      brak e       = "(" ++ show e ++ ")"
 
 eval :: Expr -> [Int]
 eval (Val n) = [n|n>0]
@@ -23,9 +53,21 @@ eval (App o l r) = [apply o x y | x <- eval l
                                 , valid o x y] 
 
 choices :: [a] -> [[a]]
-choices [] = [[]]
-choices (x:xs) = [x:ys | ys <- choices xs] ++ choices xs
+choices xs = [ p | s <- subs xs, p <- perms s]
 
+subs :: [a] -> [[a]]
+subs []     = [[]]
+subs (x:xs) = yss ++ map (x:) yss
+  where
+    yss = subs xs
+
+perms :: [a] -> [[a]]
+perms []     = [[]]
+perms (x:xs) = concat (map (interleave x) (perms xs))
+
+interleave :: a -> [a] -> [[a]]
+interleave x []     = [[x]]
+interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
 
 
 values :: Expr -> [Int]
@@ -56,5 +98,4 @@ combine l r =
 solutions :: [Int] -> Int -> [Expr]
 solutions ns n = [e | ns'   <- choices ns
                     ,e      <- exprs ns'
-                    ,eval e == [n]] 
-
+                    ,eval e == [n]]
