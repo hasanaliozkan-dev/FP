@@ -46,6 +46,15 @@ instance Show Expr where
       brak (Val n) = show n
       brak e       = "(" ++ show e ++ ")"
 
+
+
+{-
+
+choices :: [a] -> [[a]]
+choices [] = [[]]
+choices (x:xs) = [x:ys | ys <- choices xs] ++ choices xs
+-}
+
 eval :: Expr -> [Int]
 eval (Val n) = [n|n>0]
 eval (App o l r) = [apply o x y | x <- eval l

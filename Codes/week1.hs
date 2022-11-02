@@ -244,15 +244,4 @@ myDrop n l =
                 Cons x xs -> myDrop (n-1) xs
 
 
--- Create Rational type
-data Rational where
-    Rat :: Int -> Int -> Rational
-
---Implement operation for adding two rational numbers
-myAddRat :: Rational -> Rational -> Rational
-myAddRat (Rat a b) (Rat c d) = Rat (a*d + b*c) (b*d)
-
--- Implement operation for multiplying two rational numbers
-myMultRat :: Rational -> Rational -> Rational
-myMultRat (Rat a b) (Rat c d) = Rat (a*c) (b*d)
 

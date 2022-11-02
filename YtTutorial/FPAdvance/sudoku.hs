@@ -29,7 +29,7 @@ puzzle = ["2....1.38",
           ".5..69784",
           "4..25...."]
 
-
+{-
 valid :: Grid -> Bool
 valid g = all noDups (rows g) &&
           all noDups (cols g) &&
@@ -59,9 +59,11 @@ chop n xs = take n xs : chop n (drop n xs)
 
 
 type Choices = [Value]
-
 choices :: Grid -> Matrix Choices
 choices g = map (map choice) g
             where
               choice v = if empty v then values else [v]
+-}
 
+rows :: Matrix a -> [Row a]
+rows =  id

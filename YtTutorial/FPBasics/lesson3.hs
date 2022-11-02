@@ -139,17 +139,18 @@ myDropWhile p (x:xs) =
 -}
 -- [f x | x<-xs , p x] == map f (filter p xs) 
 
+--Derste işlendi
 beforeNewLine :: String -> String
 beforeNewLine ""        = ""
 beforeNewLine ('\n':xs) = ""
 beforeNewLine (x:xs)    = x : beforeNewLine xs
-
+--Derste işlendi
 afterNewLine :: String -> String
 afterNewLine ""        = ""
 afterNewLine ('\n':xs) = xs
 afterNewLine (x:xs)    = afterNewLine xs
 
-
+--Derste işlendi
 myLines :: String -> [String]
 myLines "" = []
 myLines xs = (beforeNewLine xs) : myLines (afterNewLine xs)

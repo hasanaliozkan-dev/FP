@@ -52,9 +52,8 @@ getDigit prompt = do
                             getDigit prompt  
 
 
--- nim game :
-nim :: IO()
-nim = play initial 1
+
+
 
 next :: Int -> Int
 next 1 = 2
@@ -76,7 +75,7 @@ play board player =
             do
                 newline
                 putStr "Player "
-                putStrLn  (show player)
+                print player
                 r <- getDigit "Enter a row number: "
                 n <- getDigit "Enter stars to remove: "
                 if valid board r n then
@@ -86,5 +85,13 @@ play board player =
                         newline
                         putStrLn "ERROR: Invalid Move !"
                         play board player
+
+
+
+
+
+-- nim game :
+nim :: IO()
+nim = play initial 1
 
 
