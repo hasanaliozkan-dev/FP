@@ -9,7 +9,6 @@ import Terms
 data Err a where
     Yes :: a      -> Err a
     No  :: String -> Err a
-
 err2String :: Show a => Err a -> String
 err2String e =
     case e of
