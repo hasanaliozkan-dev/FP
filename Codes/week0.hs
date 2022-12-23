@@ -41,7 +41,7 @@ qSort l =
         [] -> []
         x : xs ->
             let 
-                le = [a | a <- xs, a <= x]
-                gt = [a | a <- xs , a > x]
+                le = [a | a <- xs, a <= x] -- [a for a in xs if a <= x]
+                gt = [a | a <- xs , a > x] -- [a for a in xs if a > x]
             in 
                 qSort le ++ [x] ++ qSort gt
