@@ -108,3 +108,5 @@ solutions :: [Int] -> Int -> [Expr]
 solutions ns n = [e | ns'   <- choices ns
                     ,e      <- exprs ns'
                     ,eval e == [n]]
+
+play = solutions [1,3,7,10,25,50] 765
