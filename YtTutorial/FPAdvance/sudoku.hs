@@ -207,5 +207,26 @@ expand m              =
       (row1,cs:row2)    = break (not . single) row
 
 
-main                  :: IO ()
-main                  =  putStrLn (unlines (head (solve4 easy)))
+
+--get name of the sudoku from user
+getSudokuName         :: IO String
+getSudokuName         =  do
+                           putStrLn "Enter the name of the sudoku file: "
+                           getLine
+
+
+   
+maineasy                  :: IO () 
+maineasy                  =  putStrLn (unlines (head (solve4 gentle)))
+
+maingentle ::IO()
+maingentle = putStrLn (unlines (head (solve4 gentle)))
+
+maindiabolical ::IO()
+maindiabolical = putStrLn (unlines (head (solve4 diabolical)))
+
+mainunsolvable ::IO()
+mainunsolvable = putStrLn (unlines (head (solve4 unsolvable)))
+
+mainminimal ::IO()
+mainminimal = putStrLn (unlines (head (solve4 minimal)))
