@@ -1,5 +1,4 @@
-
-
+module Main where
 import Data.List 
 
 type Grid             = Matrix Value
@@ -216,17 +215,17 @@ getSudokuName         =  do
 
 
    
-maineasy                  :: IO () 
-maineasy                  =  putStrLn (unlines (head (solve4 gentle)))
+main                  :: IO () 
+main                  =  putStrLn (unlines (head (solve4 minimal)))
 
-maingentle ::IO()
-maingentle = putStrLn (unlines (head (solve4 gentle)))
+--maingentle ::IO()
+--maingentle = putStrLn (unlines (head (solve4 gentle)))
 
-maindiabolical ::IO()
-maindiabolical = putStrLn (unlines (head (solve4 diabolical)))
+--maindiabolical ::IO()
+--maindiabolical = putStrLn (unlines (head (solve4 diabolical)))
 
-mainunsolvable ::IO()
-mainunsolvable = putStrLn (unlines (head (solve4 unsolvable)))
+--mainunsolvable ::IO()
+--mainunsolvable = putStrLn (unlines (head (solve4 unsolvable)))
 
-mainminimal ::IO()
-mainminimal = putStrLn (unlines (head (solve4 minimal)))
+--mainminimal ::IO()
+--mainminimal = putStrLn (unlines (head (solve4 minimal)))
