@@ -1,4 +1,4 @@
-
+import Prelude hiding (Monad, (>>=), (>>), fail, return)
 
 data Expr = Val Int | Div Expr Expr
 
@@ -66,3 +66,42 @@ doeval e =
             n <- doeval x
             m <- doeval y
             safediv n m
+
+class Applicative m => Monad m where 
+    bindingoperatorm :: m a -> (a -> m b) -> m b
+    return :: a -> m a
+    return = pure
+
+instance Monad Maybe where
+    --bindingoperatorm :: Maybe a -> (a -> Maybe b) -> Maybe b
+    bindingoperatorm Nothing f = Nothing
+    bindingoperatorm (Just x) f = f x  
+    return = Just   
+
+instance Monad [] where 
+    --bindingoperatorm :: [a] -> (a -> [b]) -> [b]
+    bindingoperatorm xs f = concat (map f xs)
+    return x = [x]
+    
+
+-- pair xs ys = [(x,y)| x <- xs, y <- ys]
+monadicPair :: [a] -> [b] -> [(a,b)]
+monadicPair xs ys = do 
+    x <- xs
+    y <- ys
+    return (x,y)
+
+--State transformer
+type State = Int
+newtype ST a = S (State -> (a, State))
+
+app :: ST a -> State -> (a, State)
+app (S st) x = st x
+
+--instance Monad ST where 
+    --bindingoperatorm :: ST a -> (a -> ST b) -> ST b
+--    bindingoperatorm st f = S(\s -> let (x,s') = app st s in app (f x) s')
+
+    --return :: a-> ST a
+--    return x = S(\s -> (x,s))
+     
