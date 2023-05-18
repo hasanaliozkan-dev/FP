@@ -104,4 +104,39 @@ app (S st) x = st x
 
     --return :: a-> ST a
 --    return x = S(\s -> (x,s))
-     
+
+--relabelling trees
+data Tree a = Leaf a | Node (Tree a) (Tree a)
+
+--print tree 
+instance Show a => Show (Tree a) where 
+    show (Leaf x) = show x
+    show (Node l r) = "(" ++ show l ++ "," ++ show r ++ ")"
+    
+t :: Tree Char
+t = Node (Node (Leaf 'a') (Leaf 'b')) (Leaf 'c')
+
+rlabel :: Tree a -> Int -> (Tree Int, Int)
+rlabel (Leaf x) n = (Leaf n, n+1)
+rlabel (Node l r) n = (Node l' r', n'')
+    where 
+        (l', n') = rlabel l n
+        (r', n'') = rlabel r n'
+fresh :: ST Int 
+fresh = S(\n -> (n, n+1))
+
+{-
+
+mlabel:: Tree a -> ST (Tree Int)
+mlabel (Leaf x) = do 
+    n <- fresh
+    return (Leaf n)
+mlabel (Node l r) = do
+    l' <- mlabel l
+    r' <- mlabel r
+    return (Node l' r')
+    
+
+label :: Tree a -> Tree Int 
+label t = fst (app (mlabel t) 0)
+-}
