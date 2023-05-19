@@ -1,7 +1,7 @@
+{-# LANGUAGE UndecidableInstances #-}
 import Prelude hiding (Monad, (>>=), (>>), fail, return,mapM)
 import qualified Control.Monad as Ghc.Base
 import Data.Char ( digitToInt, isDigit )
-import GHC.Cmm.Graph (mkJumpExtra)
 data Expr = Val Int | Div Expr Expr
 
 eval :: Expr -> Int
@@ -206,5 +206,66 @@ What is the point of monads?
 1) Support pure programming with effects
 2) Use of monad is explicit in types
 3) Can generalise function to any effect
+-}
+
+-- *-> * expression data type
+data ExprTwo a = ValTwo a | DivTwo (ExprTwo a) (ExprTwo a) deriving Show
+-- create applicative for ExprTwo
+instance Functor ExprTwo where 
+    --fmap :: (a -> b) -> Expr a -> Expr b
+    fmap f (ValTwo x) = ValTwo (f x)
+    fmap f (DivTwo x y) = DivTwo (fmap f x) (fmap f y)
+
+--make Expr a monad
+instance Applicative ExprTwo => Monad ExprTwo where 
+    --bindingoperatorm :: Expr a -> (a -> Expr b) -> Expr b
+    bindingoperatorm (ValTwo x) f = f x
+    bindingoperatorm (DivTwo x y) f = DivTwo (bindingoperatorm x f) (bindingoperatorm y f)
+
+    --return :: a -> Expr a
+    return = ValTwo
+
+
+f :: Num a =>  Char -> ExprTwo a
+f 'x' = DivTwo (ValTwo 1) (ValTwo 2)
+f 'y' = ValTwo 3
+
+-- Reasioning about programs
+
+{-
+    1) Equational Reasoning  
+        - x*y = y*x (Commutativity)
+        - x + (y + z)  = (x + y) + z (Associativity)
+        - x(y + z) = xy + xz (Distributivity)
+
+
+-}
+
+doublemy :: Int -> Int
+doublemy x = x + x
+
+{-
+    2) Substitution Model
+        - doublemy (doublemy 2)
+        - doublemy (2 + 2)
+        - (2 + 2) + (2 + 2)
+        - 8
+-}
+isZero :: Int -> Bool
+--isZero 0 = True             -- None overlapping patterns
+--isZero n | n /= 0 = False   -- None overlapping patterns
+isZero n = 
+        case n of              -- None overlapping patterns
+            0 -> True
+            n | n /= 0 -> False
+
+{-
+1) How to do proofs about programs?
+-}
+{-
+2) How to improve program efficiency?
+-}
+{-
+3) Case study: compiler correctness
 -}
 
