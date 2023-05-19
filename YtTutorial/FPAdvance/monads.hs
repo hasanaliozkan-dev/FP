@@ -1,5 +1,7 @@
-import Prelude hiding (Monad, (>>=), (>>), fail, return)
-
+import Prelude hiding (Monad, (>>=), (>>), fail, return,mapM)
+import qualified Control.Monad as Ghc.Base
+import Data.Char ( digitToInt, isDigit )
+import GHC.Cmm.Graph (mkJumpExtra)
 data Expr = Val Int | Div Expr Expr
 
 eval :: Expr -> Int
@@ -140,3 +142,69 @@ mlabel (Node l r) = do
 label :: Tree a -> Tree Int 
 label t = fst (app (mlabel t) 0)
 -}
+
+
+mapM :: (Monad m, Ghc.Base.Monad m) => (a -> m b) -> [a] -> m [b]
+mapM f [] = return []
+mapM f (x:xs) = do 
+    y <- f x
+    ys <- mapM f xs
+    return (y:ys)
+
+conv :: Char -> Maybe Int
+conv c | isDigit c = Just (digitToInt c)
+       | otherwise = Nothing
+
+--concat :: [[a]] -> [a]
+--concat xss = [x | xs <- xss, x <- xs]
+
+--flattened we can use this in flatten layer .
+joinM :: (Monad m, Ghc.Base.Monad m) => m (m a) -> m a
+joinM mmx = do 
+            mx <- mmx
+            x <- mx
+            return x
+
+--Monad laws
+{-
+Law 1)  return x >>= f = f x
+        return x --> x is a type of a and return x is a type of m a
+        f --> f is a type of a -> m b
+        (>>=) --> (>>=) is a type of m a -> (a -> m b) -> m b
+-}
+{-
+Law 2)  mx >>= return = mx (return is an identity for bind)
+        mx --> mx is a type of m a
+        return --> return is a type of a -> m a
+        (>>=) --> (>>=) is a type of m a -> (a -> m b) -> m b
+-}
+{-
+Law 3)  (m >>= f) >>= g = m >>= (\x -> f x >>= g)
+        m --> m is a type of m a
+        f --> f is a type of a -> m b
+        g --> g is a type of b -> m c
+        (>>=) --> (>>=) is a type of m a -> (a -> m b) -> m b (in a monadic certain the bind operator is associative)
+-}
+
+--Effectful programming
+-- a -> b     -- pure function
+-- a -> m b   -- effectful function 
+
+{-
+|------------------------------------|
+|Type              |       Effect    |
+|------------------|-----------------|
+| a -> Maybe a     | Exceptions      |
+| a -> [b]         | Non-determinism |
+| a -> ST b        | Internal State  |
+| a -> IO          | Input/Output    |
+|------------------------------------|
+-}
+
+{-
+What is the point of monads?
+1) Support pure programming with effects
+2) Use of monad is explicit in types
+3) Can generalise function to any effect
+-}
+
