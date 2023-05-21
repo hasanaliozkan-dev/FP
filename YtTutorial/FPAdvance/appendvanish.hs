@@ -28,8 +28,13 @@ How many steps does `reverse xs` take?
 
 
 {-
-
 fastreversehelper (x:xs) ys = (reverse xs) ++ ys
+
+Base case:
+fastreversehelper [] ys = ys
+
+Inductive case:
+
 fastreversehelper (x:xs) ys 
 = reverse (x:xs) ++ ys 
 = (reverse xs ++ [x]) ++ ys
@@ -49,4 +54,61 @@ fastreversehelper l1 l2 =
 fastreverse :: [a] -> [a]
 fastreverse l = fastreversehelper l []
 
+{-
+|------------------------------------------------|
+|rev:: [a] -> [a]             |                  | 
+|rev [] = []                  | Slow :(          |
+|rev (x:xs) = rev xs ++ [x]   | Quadratic        |  
+|------------------------------------------------|
+|------------------------------------------------|
+|rev:: [a] -> [a]             |                  |         
+|rev xs = revhelper xs []     | Fast :)          |
+|                             |                  |
+|revhelper:: [a] -> [a] -> [a]| Linear           |
+|revhelper [] ys = ys         |                  |
+|revhelper (x:xs) ys =        |                  |
+|         revhelper xs (x:ys) |                  |
+|------------------------------------------------|
+-}
 
+
+--Fast Flatten 
+
+data Tree = Leaf Int | Node Tree Tree
+
+flattenslow :: Tree -> [Int]
+flattenslow t = 
+        case t of 
+            Leaf x -> [x]
+            Node t1 t2 -> flattenslow t1 ++ flattenslow t2
+
+{-
+
+flattenhelper t ys = flatten t ++ ys
+
+Base case:
+flattenhelper (Leaf x) ys
+= flatten (Leaf x) ++ ys
+= [x] ++ ys
+= x:ys
+
+Inductive case:
+flattenhelper (Node l r) ys
+= flatten (Node l r) ++ ys
+= (flatten l ++ flatten r) ++ ys
+= flatten l ++ (flatten r ++ ys)
+= flatten l ++ (flattenhelper r ys)
+= flattenhelper l (flattenhelper r ys)
+
+flattenhelper (Node l r) ys = flattenhelper l (flattenhelper r ys)
+-}
+
+flattenhelper :: Tree -> [Int] -> [Int]
+flattenhelper t ys = 
+        case t of 
+            Leaf x -> x:ys
+            Node l r -> flattenhelper l (flattenhelper r ys)
+
+
+flatten :: Tree -> [Int]
+flatten t = flattenhelper t []
